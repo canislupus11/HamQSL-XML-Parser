@@ -13,6 +13,7 @@
 #define YELLOW 0xff80
 #define GREEN 0x07e0
 #define WHITE 0xFFFF
+#define BACKGROUND 0x0006
 #define column 145
 #define row 30
 #define interval 60 // <-- Interwał w minutach co jaki czas są poierane dane z serwera
@@ -42,14 +43,14 @@ void setup() {
   tft.setRotation(3);
   tft.setTextSize(1);
   tft.setFont(&FreeSansBold9pt7b);
-  tft.fillScreen(ILI9341_BLACK);
+  tft.fillScreen(BACKGROUND);
   digitalWrite(LED,1);
   tft.setCursor(60, 67);
   tft.setTextColor(0xFFFF);
   tft.println("HF Propagation report");
   tft.setCursor(60, 85);
   tft.println("canis_lupus - SQ9ZAQ");
-  tft.setCursor(40, 115);
+  tft.setCursor(45, 115);
   tft.println("Serial debug: 115200 baud");
 
  
@@ -148,7 +149,8 @@ String getAttr(const String& tag, const String& attrName) {
 
 void Display() {
   digitalWrite(LED,0);
-  tft.fillScreen(ILI9341_BLACK);
+  tft.fillScreen(BACKGROUND);
+  digitalWrite(LED,1);
   tft.setTextColor(WHITE);
   tft.setCursor(58, 20);
   tft.println("DAY");
@@ -210,6 +212,4 @@ void Display() {
         break;
     }
   }; 
- digitalWrite(LED,1);
-
 }
