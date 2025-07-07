@@ -72,7 +72,7 @@ void setup() {
   tft.setTextSize(1);
   tft.setFont(&FreeSansBold9pt7b);
   tft.fillScreen(BACKGROUND);
-  tft.drawRoundRect(10,30,310,160,10,WHITE);
+  tft.drawRoundRect(10,30,310,125,10,WHITE);
   tft.setCursor(65, 67);
   tft.setTextColor(0xFFFF);
   tft.println("HF Propagation report");
@@ -94,7 +94,7 @@ void setup() {
   } 
   else {
     Serial.println("connected...yeey :)");
-    tft.setCursor(50, 162);
+    tft.setCursor(50, 180);
     tft.println("WiFi Connected...");
   }
   tft.setFont(&FreeSansBold12pt7b);
@@ -113,7 +113,7 @@ void GetXMLData() {
   http.get(url);
   int statusCode = http.responseStatusCode();
   String response = http.responseBody();
-  Serial.println(response);
+  //Serial.println(response); // <- Włączyć, aby podglądnąć ściągniętego XML w konsoli szeregowej
   
   if (statusCode != 200) {
     Serial.println("Błąd podczas pobierania danych.");
@@ -331,11 +331,12 @@ void Display() {
   tft.setFont(&FreeSans9pt7b);
   tft.setTextColor(WHITE);
   tft.setCursor(17, 155);
-  tft.println("Solar Flux: " + String(solarflux));
+  
+  tft.println("K-Index:     " + String(kindex));
   tft.setCursor(17, 1*s_row+s_row_offset);
   tft.println("A-Index:     " + String(aindex));
   tft.setCursor(17, 2*s_row+s_row_offset);
-  tft.println("K-Index:     " + String(kindex));
+  tft.println("Solar Flux: " + String(solarflux));
   tft.setCursor(17, 3*s_row+s_row_offset);
   tft.println("Sunspots:   " + String(sunspots));
   
@@ -356,5 +357,5 @@ void Display() {
   tft.println("4m: " + vhf_conditions[4]);
   tft.setCursor(160, 3*s_row+s_row_offset);
   tft.setTextColor(WHITE);
-  tft.println("X-Ray:    " + xray);
+  tft.println("X-Ray:      " + xray);
 }
