@@ -80,31 +80,23 @@ void setup() {
   tft.setTextSize(1);
   tft.setFont(&FreeSansBold9pt7b);
   tft.fillScreen(BACKGROUND);
-  tft.drawRoundRect(10,30,310,125,10,WHITE);
-  tft.setCursor(65, 67);
+  tft.drawRoundRect(10,10,310,105,10,WHITE);
+  tft.setCursor(65, 37);
   tft.setTextColor(0xFFFF);
   tft.println("HF Propagation report");
-  tft.setCursor(65, 85);
+  tft.setCursor(65, 55);
   tft.println("canis_lupus - SQ9ZAQ");
-  tft.setCursor(48, 103);
+  tft.setCursor(48, 73);
   tft.println("Data source: HAMQSL.com");
-  tft.setCursor(50, 121);
+  tft.setCursor(50, 91);
   tft.println("Serial debug: 115200 baud");
   digitalWrite(LED, 1);
 
-  bool wm_nonblocking = true;
-  WiFiManager wm;
-  wm.setConnectTimeout(20);
-  bool res;
-  res = wm.autoConnect("WiFi Config Portal");
-  if(!res) {
-    Serial.println("Failed to connect");
-  } 
-  else {
-    Serial.println("connected...yeey :)");
-    tft.setCursor(50, 180);
-    tft.println("WiFi Connected...");
-  }
+
+
+  connectToWiFi();
+
+
   tft.setFont(&FreeSansBold12pt7b);
   secureClient.setInsecure();  
 }
@@ -114,6 +106,48 @@ void loop() {
   GetXMLData();
   Display();
   delay(interval*60*1000);
+}
+
+  void connectToWiFi() {
+  WiFi.mode(WIFI_STA); // Ustaw tryb stacji
+  WiFiManager wm;
+  //wm.resetSettings();  //odkomentuj aby zresetować WiFi Managera
+  wm.setWiFiAPChannel(6);
+  wm.setConfigPortalTimeout(300); // timeout w sekundach (5 minut)
+
+  wm.setAPCallback([](WiFiManager* wm) {
+    Serial.println("-> Uruchamiam WiFiManager captive portal...");
+    tft.setTextColor(RED);
+    tft.setCursor(20, 140);
+    tft.println("WiFi config mode");
+    tft.setCursor(20, 160);
+    tft.println("Connect to the Wi-Fi HamQSL"); 
+    tft.setCursor(20, 180);
+    tft.println("to configure the connection");
+    tft.setCursor(20, 200);
+    tft.println("and open 192.168.4.1");
+  });
+
+  
+  // Spróbuj połączyć automatycznie lub pokaż captive portal
+  if (!wm.autoConnect("HamQSL")) {
+    Serial.println("! Nie połączono z Wi-Fi w ciągu 5 minut. Restartuję ESP32...");
+    delay(2000);
+    digitalWrite(LED, 0);
+    ESP.restart();
+  }
+
+  // Udało się połączyć
+  Serial.println("✔ Połączono z Wi-Fi!");
+  digitalWrite(LED, 0);
+  tft.fillScreen(BACKGROUND);
+  digitalWrite(LED, 1);
+  tft.setCursor(20, 160);
+  tft.setTextColor(GREEN);
+  tft.println("WiFi connected");
+  Serial.print("Adres IP: ");
+  Serial.println(WiFi.localIP());
+  delay(300);
 }
 
 bool fetchXML(int retries = 3) {
@@ -134,6 +168,8 @@ void GetXMLData() {
   
   if (!fetchXML()) {
   Serial.println("Nie udało się pobrać danych po kilku próbach.");
+  delay(2000);
+  ESP.restart();
   return;
 }
   
@@ -379,3 +415,4 @@ void Display() {
   tft.setTextColor(WHITE);
   tft.println("X-Ray:      " + xray);
 }
+
