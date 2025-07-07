@@ -2,7 +2,6 @@
 #include <WiFiManager.h>
 #include <WiFiClientSecure.h>
 #include <ArduinoHttpClient.h>
-
 #include "SPI.h"
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9341.h"
@@ -10,11 +9,14 @@
 #include "Fonts/FreeSans9pt7b.h"
 #include "Fonts/FreeSansBold12pt7b.h"
 
+// Definicje kolorów
 #define RED 0xf882
 #define YELLOW 0xff80
 #define GREEN 0x07e0
 #define WHITE 0xFFFF
 #define BACKGROUND 0x0000
+
+// Definicje pozycji na ekranie
 #define column 145
 #define row 25
 #define row_offset 20
@@ -22,6 +24,8 @@
 #define s_column_offset 15
 #define s_row 20
 #define s_row_offset 155
+
+// Konfiguracja systemu
 #define interval 60 // Interwał w minutach co jaki czas są pobierane dane z serwera
 #define LED 22
 
@@ -33,9 +37,10 @@
 #define TFT_RST  26
 #define TFT_MISO 33
 
+// Inicjalizacja wyświetlacza
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
 
-// HTTPS config
+// Konfiguracja HTTPS
 const char* host = "www.hamqsl.com";
 const int httpsPort = 443;
 const String url = "/solarxml.php";
@@ -71,16 +76,26 @@ String vhf_phenomena[5] = {"", "", "", "", ""};
 String vhf_locations[5] = {"", "", "", "", ""};
 String vhf_conditions[5] = {"", "", "", "", ""};
 
+// Deklaracje funkcji
+void connectToWiFi();
+bool fetchXML(int retries = 3);
+void GetXMLData();
+String getXMLValue(const String& xml, const String& tag);
+int toConditionValue(String val);
+String getAttr(const String& tag, const String& attrName);
+void Display();
+
 void setup() {
   Serial.begin(115200);
   pinMode(LED, OUTPUT);
   delay(1000);
+  
   tft.begin();
   tft.setRotation(3);
   tft.setTextSize(1);
   tft.setFont(&FreeSansBold9pt7b);
   tft.fillScreen(BACKGROUND);
-  tft.drawRoundRect(10,10,310,105,10,WHITE);
+  tft.drawRoundRect(10, 10, 300, 105, 10, WHITE);
   tft.setCursor(65, 37);
   tft.setTextColor(0xFFFF);
   tft.println("HF Propagation report");
@@ -92,24 +107,21 @@ void setup() {
   tft.println("Serial debug: 115200 baud");
   digitalWrite(LED, 1);
 
-
-
   connectToWiFi();
 
-
   tft.setFont(&FreeSansBold12pt7b);
-  secureClient.setInsecure();  
+  secureClient.setInsecure();
 }
 
 void loop() {
   memset(propagation, 3, sizeof(propagation));
   GetXMLData();
   Display();
-  delay(interval*60*1000);
+  delay(interval * 60 * 1000);
 }
 
-  void connectToWiFi() {
-  WiFi.mode(WIFI_STA); // Ustaw tryb stacji
+void connectToWiFi() {
+  WiFi.mode(WIFI_STA); 
   WiFiManager wm;
   //wm.resetSettings();  //odkomentuj aby zresetować WiFi Managera
   wm.setWiFiAPChannel(6);
@@ -121,14 +133,13 @@ void loop() {
     tft.setCursor(20, 140);
     tft.println("WiFi config mode");
     tft.setCursor(20, 160);
-    tft.println("Connect to the Wi-Fi HamQSL"); 
+    tft.println("Connect to the Wi-Fi HamQSL");
     tft.setCursor(20, 180);
     tft.println("to configure the connection");
     tft.setCursor(20, 200);
     tft.println("and open 192.168.4.1");
   });
 
-  
   // Spróbuj połączyć automatycznie lub pokaż captive portal
   if (!wm.autoConnect("HamQSL")) {
     Serial.println("! Nie połączono z Wi-Fi w ciągu 5 minut. Restartuję ESP32...");
@@ -139,10 +150,7 @@ void loop() {
 
   // Udało się połączyć
   Serial.println("✔ Połączono z Wi-Fi!");
-  digitalWrite(LED, 0);
-  tft.fillScreen(BACKGROUND);
-  digitalWrite(LED, 1);
-  tft.setCursor(20, 160);
+  tft.setCursor(95, 160);
   tft.setTextColor(GREEN);
   tft.println("WiFi connected");
   Serial.print("Adres IP: ");
@@ -150,7 +158,7 @@ void loop() {
   delay(300);
 }
 
-bool fetchXML(int retries = 3) {
+bool fetchXML(int retries) {
   for (int i = 0; i < retries; ++i) {
     Serial.println("Pobieranie danych XML...");
     http.get(url);
@@ -163,19 +171,17 @@ bool fetchXML(int retries = 3) {
   return false;
 }
 
-
 void GetXMLData() {
-  
   if (!fetchXML()) {
-  Serial.println("Nie udało się pobrać danych po kilku próbach.");
-  delay(2000);
-  ESP.restart();
-  return;
-}
-  
+    Serial.println("Nie udało się pobrać danych po kilku próbach.");
+    delay(2000);
+    ESP.restart();
+    return;
+  }
+
   String response = http.responseBody();
   //Serial.println(response); // <- Włączyć, aby podglądnąć ściągniętego XML w konsoli szeregowej
-  
+
   // Parsowanie podstawowych danych
   updated = getXMLValue(response, "updated");
   solarflux = getXMLValue(response, "solarflux").toInt();
@@ -215,7 +221,7 @@ void GetXMLData() {
     value.trim();
 
     int numeric = toConditionValue(value);
-    
+
     if (name == "80m-40m" && time == "day") propagation[0] = numeric;
     if (name == "30m-20m" && time == "day") propagation[1] = numeric;
     if (name == "17m-15m" && time == "day") propagation[2] = numeric;
@@ -271,10 +277,10 @@ void GetXMLData() {
   Serial.println("Geomagnetic Field: " + geomagfield);
   Serial.println("Signal Noise: " + signalnoise);
   Serial.println("MUF: " + muf);
-  
+
   Serial.println("=== WARUNKI VHF ===");
-  for(int i = 0; i < 5; i++) {
-    if(vhf_phenomena[i] != "") {
+  for (int i = 0; i < 5; i++) {
+    if (vhf_phenomena[i] != "") {
       Serial.println(vhf_phenomena[i] + " (" + vhf_locations[i] + "): " + vhf_conditions[i]);
     }
   }
@@ -283,14 +289,14 @@ void GetXMLData() {
 String getXMLValue(const String& xml, const String& tag) {
   String openTag = "<" + tag + ">";
   String closeTag = "</" + tag + ">";
-  
+
   int start = xml.indexOf(openTag);
   if (start == -1) return "";
-  
+
   start += openTag.length();
   int end = xml.indexOf(closeTag, start);
   if (end == -1) return "";
-  
+
   String value = xml.substring(start, end);
   value.trim();
   return value;
@@ -325,11 +331,11 @@ void Display() {
   tft.setCursor(197, 23);
   tft.println("NIGHT");
   tft.setFont(&FreeSansBold12pt7b);
-  tft.drawRoundRect(5,3,310,230,10, WHITE);
+  tft.drawRoundRect(5, 3, 310, 230, 10, WHITE);
   tft.drawLine(15, 132, 305, 132, WHITE);
 
   for (int i = 0; i < 8; i++) {
-    switch(propagation[i]) {
+    switch (propagation[i]) {
       case 0:
         tft.setTextColor(RED);
         break;
@@ -338,81 +344,89 @@ void Display() {
         break;
       case 2:
         tft.setTextColor(GREEN);
-        break;      
+        break;
     }
-    
-    switch(i) {
+
+    switch (i) {
       case 0:
-        tft.setCursor(0*column+32, 1*row+row_offset);
+        tft.setCursor(0 * column + 32, 1 * row + row_offset);
         tft.printf("80m-40m");
         Serial.printf("Day 80m-40m: %d\n", propagation[i]);
         break;
       case 1:
-        tft.setCursor(0*column+32, 2*row+row_offset);
+        tft.setCursor(0 * column + 32, 2 * row + row_offset);
         tft.printf("30m-20m");
         Serial.printf("Day 30m-20m: %d\n", propagation[i]);
         break;
       case 2:
-        tft.setCursor(0*column+32, 3*row+row_offset);
+        tft.setCursor(0 * column + 32, 3 * row + row_offset);
         tft.printf("17m-15m");
         Serial.printf("Day 17m-15m: %d\n", propagation[i]);
         break;
       case 3:
-        tft.setCursor(0*column+32, 4*row+row_offset);
+        tft.setCursor(0 * column + 32, 4 * row + row_offset);
         tft.printf("12m-10m");
         Serial.printf("Day 12m-10m: %d\n", propagation[i]);
         break;
       case 4:
-        tft.setCursor(1*column+32, 1*row+row_offset);
+        tft.setCursor(1 * column + 32, 1 * row + row_offset);
         tft.printf("80m-40m");
         Serial.printf("Night 80m-40m: %d\n", propagation[i]);
         break;
       case 5:
-        tft.setCursor(1*column+32, 2*row+row_offset);
+        tft.setCursor(1 * column + 32, 2 * row + row_offset);
         tft.printf("30m-20m");
         Serial.printf("Night 30m-20m: %d\n", propagation[i]);
         break;
       case 6:
-        tft.setCursor(1*column+32, 3*row+row_offset);
+        tft.setCursor(1 * column + 32, 3 * row + row_offset);
         tft.printf("17m-15m");
         Serial.printf("Night 17m-15m: %d\n", propagation[i]);
         break;
       case 7:
-        tft.setCursor(1*column+32, 4*row+row_offset);
+        tft.setCursor(1 * column + 32, 4 * row + row_offset);
         tft.printf("12m-10m");
         Serial.printf("Night 12m-10m: %d\n", propagation[i]);
         break;
     }
   }
+  
   tft.setFont(&FreeSans9pt7b);
   tft.setTextColor(WHITE);
   tft.setCursor(17, 155);
-  
   tft.println("K-Index:     " + String(kindex));
-  tft.setCursor(17, 1*s_row+s_row_offset);
+  tft.setCursor(17, 1 * s_row + s_row_offset);
   tft.println("A-Index:     " + String(aindex));
-  tft.setCursor(17, 2*s_row+s_row_offset);
+  tft.setCursor(17, 2 * s_row + s_row_offset);
   tft.println("Solar Flux: " + String(solarflux));
-  tft.setCursor(17, 3*s_row+s_row_offset);
+  tft.setCursor(17, 3 * s_row + s_row_offset);
   tft.println("Sunspots:   " + String(sunspots));
-  
+
   tft.setCursor(160, 155);
-  if (vhf_conditions[1] != "Band Closed"){
-    tft.setTextColor(GREEN);}
-    else {tft.setTextColor(WHITE);}
+  if (vhf_conditions[1] != "Band Closed") {
+    tft.setTextColor(GREEN);
+  } else {
+    tft.setTextColor(WHITE);
+  }
   tft.println("2m: " + vhf_conditions[1]);
-  tft.setCursor(160, 1*s_row+s_row_offset);
-    if (vhf_conditions[3] != "Band Closed"){
-    tft.setTextColor(GREEN);}
-    else {tft.setTextColor(WHITE);}
+  
+  tft.setCursor(160, 1 * s_row + s_row_offset);
+  if (vhf_conditions[3] != "Band Closed") {
+    tft.setTextColor(GREEN);
+  } else {
+    tft.setTextColor(WHITE);
+  }
   tft.println("6m: " + vhf_conditions[3]);
-  tft.setCursor(160, 2*s_row+s_row_offset);
-    if (vhf_conditions[4] != "Band Closed"){
-    tft.setTextColor(GREEN);}
-    else {tft.setTextColor(WHITE);}
+  
+  tft.setCursor(160, 2 * s_row + s_row_offset);
+  if (vhf_conditions[4] != "Band Closed") {
+    tft.setTextColor(GREEN);
+  } else {
+    tft.setTextColor(WHITE);
+  }
   tft.println("4m: " + vhf_conditions[4]);
-  tft.setCursor(160, 3*s_row+s_row_offset);
+  
+  tft.setCursor(160, 3 * s_row + s_row_offset);
   tft.setTextColor(WHITE);
   tft.println("X-Ray:      " + xray);
 }
-
