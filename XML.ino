@@ -25,7 +25,15 @@
 #define interval 60 // Interwał w minutach co jaki czas są pobierane dane z serwera
 #define LED 22
 
-Adafruit_ILI9341 tft = Adafruit_ILI9341(12, 14, 27, 25, 26, 33);
+// Konfiguracja wyświetlacza
+#define TFT_CS   12
+#define TFT_DC   14
+#define TFT_MOSI 27
+#define TFT_CLK  25
+#define TFT_RST  26
+#define TFT_MISO 33
+
+Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
 
 // HTTPS config
 const char* host = "www.hamqsl.com";
@@ -45,7 +53,7 @@ String xray = "";
 int sunspots = 0;
 float heliumline = 0.0;
 int protonflux = 0;
-int electonflux = 0;
+int electronflux = 0;
 int aurora = 0;
 float normalization = 0.0;
 float latdegree = 0.0;
@@ -108,18 +116,30 @@ void loop() {
   delay(interval*60*1000);
 }
 
+bool fetchXML(int retries = 3) {
+  for (int i = 0; i < retries; ++i) {
+    Serial.println("Pobieranie danych XML...");
+    http.get(url);
+    int statusCode = http.responseStatusCode();
+    if (statusCode == 200) {
+      return true;
+    }
+    delay(1000); // poczekaj przed ponowną próbą pobrania danych
+  }
+  return false;
+}
+
+
 void GetXMLData() {
-  Serial.println("Pobieranie danych XML...");
-  http.get(url);
-  int statusCode = http.responseStatusCode();
+  
+  if (!fetchXML()) {
+  Serial.println("Nie udało się pobrać danych po kilku próbach.");
+  return;
+}
+  
   String response = http.responseBody();
   //Serial.println(response); // <- Włączyć, aby podglądnąć ściągniętego XML w konsoli szeregowej
   
-  if (statusCode != 200) {
-    Serial.println("Błąd podczas pobierania danych.");
-    return;
-  }
-
   // Parsowanie podstawowych danych
   updated = getXMLValue(response, "updated");
   solarflux = getXMLValue(response, "solarflux").toInt();
@@ -130,7 +150,7 @@ void GetXMLData() {
   sunspots = getXMLValue(response, "sunspots").toInt();
   heliumline = getXMLValue(response, "heliumline").toFloat();
   protonflux = getXMLValue(response, "protonflux").toInt();
-  electonflux = getXMLValue(response, "electonflux").toInt();
+  electronflux = getXMLValue(response, "electronflux").toInt();
   aurora = getXMLValue(response, "aurora").toInt();
   normalization = getXMLValue(response, "normalization").toFloat();
   latdegree = getXMLValue(response, "latdegree").toFloat();
@@ -206,7 +226,7 @@ void GetXMLData() {
   Serial.println("Sunspots: " + String(sunspots));
   Serial.println("Helium Line: " + String(heliumline));
   Serial.println("Proton Flux: " + String(protonflux));
-  Serial.println("Electron Flux: " + String(electonflux));
+  Serial.println("Electron Flux: " + String(electronflux));
   Serial.println("Aurora: " + String(aurora));
   Serial.println("Normalization: " + String(normalization));
   Serial.println("Lat Degree: " + String(latdegree));
