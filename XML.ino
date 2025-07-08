@@ -320,6 +320,15 @@ String getAttr(const String& tag, const String& attrName) {
   return tag.substring(attrStart, attrEnd);
 }
 
+bool isGreaterThanM5(String val) {
+  if (val.length() < 2) return false;
+
+  char letter = val.charAt(0);
+  float number = val.substring(1).toFloat();
+
+  return (letter >= 'M' && number >= 5.0);
+}
+
 void Display() {
   tft.setFont(&FreeSansBold9pt7b);
   digitalWrite(LED, 0);
@@ -427,6 +436,8 @@ void Display() {
   tft.println("4m: " + vhf_conditions[4]);
   
   tft.setCursor(160, 3 * s_row + s_row_offset);
-  tft.setTextColor(WHITE);
+  if (isGreaterThanM5(xray)) {
+    tft.setTextColor(RED);
+  } else {tft.setTextColor(WHITE);}
   tft.println("X-Ray:      " + xray);
 }
