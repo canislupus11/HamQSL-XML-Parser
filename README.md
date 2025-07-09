@@ -4,7 +4,7 @@ License: CC-BY-NC-SA
 ![pic](https://github.com/user-attachments/assets/eb456f8e-38cd-4349-b8d8-97ac4f5daadc)
 
 ## How It Works
-The device connects to a Wi-Fi network and retrieves propagation data from HAMQSL.com in XML format. It displays information like Solar Flux, sunspot number, K and A indices, and propagation conditions for HF, 6m, 4m, and VHF (2m) bands on a color TFT display.
+The device connects to a Wi-Fi network and retrieves propagation data from HAMQSL.com in XML format. It displays information like Solar Flux, sunspot number, K and A indices, and propagation conditions for HF, 6m, 4m, and VHF (2m) bands on a color TFT display. All XML data is parsed into variables in the code, so you can easily configure which information should be displayed or how it should be presented.
 
 ## First Start
 1. Power on the device.
@@ -60,7 +60,7 @@ If any of the bands (6m, 4m, 2m) is open (e.g., via tropo or aurora), its label 
 
 
 ## Opis działania
-Urządzenie łączy się z siecią Wi-Fi i pobiera dane propagacyjne z serwera HAMQSL.com w formacie XML. Informacje takie jak Solar Flux, liczba plam słonecznych, indeksy K i A oraz warunki propagacyjne w pasmach HF, 6m, 4m i VHF (2m) są wyświetlane na kolorowym wyświetlaczu TFT.
+Urządzenie łączy się z siecią Wi-Fi i pobiera dane propagacyjne z serwera HAMQSL.com w formacie XML. Informacje takie jak Solar Flux, liczba plam słonecznych, indeksy K i A oraz warunki propagacyjne w pasmach HF, 6m, 4m i VHF (2m) są wyświetlane na kolorowym wyświetlaczu TFT. Wszystkie dane z XML są wyciągane do odpowiednich zmiennych w kodzie – dzięki temu można łatwo dostosować, które informacje mają być wyświetlane lub w jakiej formie.
 
 ## Pierwsze uruchomienie
 1. Włącz urządzenie.
