@@ -10,8 +10,10 @@
 #include "Fonts/FreeSansBold12pt7b.h"
 
 // Definicje kolorów
-#define RED 0xf882
-#define YELLOW 0xff80
+//#define RED 0xf882
+#define RED 0xf904
+//#define YELLOW 0xff80
+#define YELLOW 0xffe0
 #define GREEN 0x07e0
 #define WHITE 0xFFFF
 #define BACKGROUND 0x0000
@@ -103,7 +105,6 @@ void setup() {
     tft.println("Resetting WiFiSettings");
     WiFiManager wifiManager;
     wifiManager.resetSettings();
-
     delay(2000);
     ESP.restart();
   }
@@ -348,9 +349,9 @@ void Display() {
   tft.fillScreen(BACKGROUND);
   digitalWrite(LED, 1);
   tft.setTextColor(WHITE);
-  tft.setCursor(62, 23);
+  tft.setCursor(66, 22);
   tft.println("DAY");
-  tft.setCursor(197, 23);
+  tft.setCursor(201, 22);
   tft.println("NIGHT");
   tft.setFont(&FreeSansBold12pt7b);
   tft.drawRoundRect(5, 3, 310, 230, 10, WHITE);
@@ -371,12 +372,12 @@ void Display() {
 
     switch (i) {
       case 0:
-        tft.setCursor(0 * column + 32, 1 * row + row_offset);
+        tft.setCursor(0 * column + 34, 1 * row + row_offset);
         tft.printf("80m-40m");
         Serial.printf("Day 80m-40m: %d\n", propagation[i]);
         break;
       case 1:
-        tft.setCursor(0 * column + 32, 2 * row + row_offset);
+        tft.setCursor(0 * column + 34, 2 * row + row_offset);
         tft.printf("30m-20m");
         Serial.printf("Day 30m-20m: %d\n", propagation[i]);
         break;
@@ -391,12 +392,12 @@ void Display() {
         Serial.printf("Day 12m-10m: %d\n", propagation[i]);
         break;
       case 4:
-        tft.setCursor(1 * column + 32, 1 * row + row_offset);
+        tft.setCursor(1 * column + 34, 1 * row + row_offset);
         tft.printf("80m-40m");
         Serial.printf("Night 80m-40m: %d\n", propagation[i]);
         break;
       case 5:
-        tft.setCursor(1 * column + 32, 2 * row + row_offset);
+        tft.setCursor(1 * column + 34, 2 * row + row_offset);
         tft.printf("30m-20m");
         Serial.printf("Night 30m-20m: %d\n", propagation[i]);
         break;
