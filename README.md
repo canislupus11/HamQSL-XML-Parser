@@ -1,3 +1,5 @@
+License: CC-BY-NC-SA
+
 # Polska wersja poniżej!
 ![pic](https://github.com/user-attachments/assets/eb456f8e-38cd-4349-b8d8-97ac4f5daadc)
 
