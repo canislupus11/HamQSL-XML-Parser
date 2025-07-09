@@ -1,4 +1,5 @@
 # Polska wersja poniżej!
+![pic](https://github.com/user-attachments/assets/eb456f8e-38cd-4349-b8d8-97ac4f5daadc)
 
 ## How It Works
 The device connects to a Wi-Fi network and retrieves propagation data from HAMQSL.com in XML format. It displays information like Solar Flux, sunspot number, K and A indices, and propagation conditions for HF, 6m, 4m, and VHF (2m) bands on a color TFT display.
