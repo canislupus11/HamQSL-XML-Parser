@@ -68,7 +68,7 @@ Urządzenie łączy się z siecią Wi-Fi i pobiera dane propagacyjne z serwera H
 5. Po zapisaniu danych urządzenie połączy się automatycznie.
 
 ## Resetowanie ustawień Wi-Fi
-- Przytrzymaj przycisk RESET (GPIO 32) podczas uruchamiania, aby zresetować ustawienia Wi-Fi.
+- Przytrzymaj przycisk RESET (GPIO 32 do masy) podczas uruchamiania, aby zresetować ustawienia Wi-Fi.
 
 ## Dane wyświetlane na ekranie
 | Pozycja          | Opis                                         |
