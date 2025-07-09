@@ -101,7 +101,6 @@ Jeśli któreś z pasm (6m, 4m, 2m) jest otwarte (np. przez tropo, aurorę), inf
 ## Wymagania techniczne
 - Mikrokontroler: ESP32
 - Wyświetlacz: TFT 2.8" ILI9341 (SPI)
-- Zasilanie: 5V
 - Biblioteki Arduino:
   - WiFiManager
   - WiFiClientSecure
