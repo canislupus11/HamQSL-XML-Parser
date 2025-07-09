@@ -28,6 +28,7 @@
 // Konfiguracja systemu
 #define interval 60 // Interwał w minutach co jaki czas są pobierane dane z serwera
 #define LED 22
+#define RESET_PIN 32
 
 // Konfiguracja wyświetlacza
 #define TFT_CS   12
@@ -88,13 +89,25 @@ void Display();
 void setup() {
   Serial.begin(115200);
   pinMode(LED, OUTPUT);
-  delay(1000);
-  
+  pinMode(RESET_PIN, INPUT_PULLUP);
   tft.begin();
   tft.setRotation(3);
   tft.setTextSize(1);
   tft.setFont(&FreeSansBold9pt7b);
   tft.fillScreen(BACKGROUND);
+  
+  if (digitalRead(RESET_PIN) == LOW) {
+    Serial.println("Reset WiFi settings...");
+    tft.setCursor(30, 160);
+    tft.setTextColor(RED);
+    tft.println("Resetting WiFiSettings");
+    WiFiManager wifiManager;
+    wifiManager.resetSettings();
+
+    delay(2000);
+    ESP.restart();
+  }
+
   tft.drawRoundRect(10, 10, 300, 105, 10, WHITE);
   tft.setCursor(65, 37);
   tft.setTextColor(0xFFFF);
@@ -407,8 +420,16 @@ void Display() {
   tft.setCursor(17, 1 * s_row + s_row_offset);
   tft.println("A-Index:     " + String(aindex));
   tft.setCursor(17, 2 * s_row + s_row_offset);
+  
+  if (solarflux > 150) {
+    tft.setTextColor(GREEN);
+  } else {tft.setTextColor(WHITE);}
   tft.println("Solar Flux: " + String(solarflux));
+  
   tft.setCursor(17, 3 * s_row + s_row_offset);
+  if (sunspots > 105) {
+    tft.setTextColor(GREEN);
+  } else {tft.setTextColor(WHITE);}
   tft.println("Sunspots:   " + String(sunspots));
 
   tft.setCursor(160, 155);
