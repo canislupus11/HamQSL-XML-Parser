@@ -417,49 +417,79 @@ void Display() {
   tft.setFont(&FreeSans9pt7b);
   tft.setTextColor(WHITE);
   tft.setCursor(17, 155);
-  tft.println("K-Index:     " + String(kindex));
+  tft.print("K-Index:     ");
+  if (kindex >= 0 && kindex <= 2) {
+    tft.setTextColor(GREEN);
+  } else if (kindex >= 3 && kindex <= 5) {
+    tft.setTextColor(YELLOW);
+  } else if (kindex >= 6 && kindex <= 9) {
+    tft.setTextColor(RED);
+  }
+  tft.println(String(kindex));
+
+  tft.setTextColor(WHITE);
   tft.setCursor(17, 1 * s_row + s_row_offset);
-  tft.println("A-Index:     " + String(aindex));
-  tft.setCursor(17, 2 * s_row + s_row_offset);
+  tft.print("A-Index:     ");
+    if (aindex >= 0 && aindex <= 10) {
+    tft.setTextColor(GREEN);
+  } else if (aindex >= 11 && aindex <= 50) {
+    tft.setTextColor(YELLOW);
+  } else if (aindex >= 51 && aindex <= 900) {
+    tft.setTextColor(RED);
+  }
+  tft.println(String(aindex));
   
+  tft.setCursor(17, 2 * s_row + s_row_offset);
+  tft.setTextColor(WHITE);
+  tft.print("Solar Flux: ");
   if (solarflux > 150) {
     tft.setTextColor(GREEN);
   } else {tft.setTextColor(WHITE);}
-  tft.println("Solar Flux: " + String(solarflux));
+  tft.println(String(solarflux));
   
   tft.setCursor(17, 3 * s_row + s_row_offset);
+  tft.setTextColor(WHITE);
+  tft.print("Sunspots:   ");
   if (sunspots > 105) {
     tft.setTextColor(GREEN);
   } else {tft.setTextColor(WHITE);}
-  tft.println("Sunspots:   " + String(sunspots));
+  tft.println(String(sunspots));
 
   tft.setCursor(160, 155);
+  tft.setTextColor(WHITE);
+  tft.print("2m: " );
   if (vhf_conditions[1] != "Band Closed") {
     tft.setTextColor(GREEN);
   } else {
     tft.setTextColor(WHITE);
   }
-  tft.println("2m: " + vhf_conditions[1]);
+  tft.print(vhf_conditions[1]);
   
   tft.setCursor(160, 1 * s_row + s_row_offset);
+  tft.setTextColor(WHITE);
+  tft.print("6m: ");
   if (vhf_conditions[3] != "Band Closed") {
     tft.setTextColor(GREEN);
   } else {
     tft.setTextColor(WHITE);
   }
-  tft.println("6m: " + vhf_conditions[3]);
+  tft.print(vhf_conditions[3]);
   
   tft.setCursor(160, 2 * s_row + s_row_offset);
+  tft.setTextColor(WHITE);
+  tft.print("4m: ");
   if (vhf_conditions[4] != "Band Closed") {
     tft.setTextColor(GREEN);
   } else {
     tft.setTextColor(WHITE);
   }
-  tft.println("4m: " + vhf_conditions[4]);
+  tft.println(vhf_conditions[4]);
   
   tft.setCursor(160, 3 * s_row + s_row_offset);
+  tft.setTextColor(WHITE);
+  tft.print("X-Ray:       ");
   if (isGreaterThanM5(xray)) {
     tft.setTextColor(RED);
   } else {tft.setTextColor(WHITE);}
-  tft.println("X-Ray:      " + xray);
+  tft.println(xray);
 }
