@@ -57,6 +57,33 @@ If any of the bands (6m, 4m, 2m) is open (e.g., via tropo or aurora), its label 
   - Adafruit_ILI9341
   - Adafruit_GFX
 
+## Environment Setup and Compilation
+
+#### Installing ESP32 Board Support
+
+1. Open Arduino IDE
+2. Go to **Tools → Board → Board Manager**
+3. Search for `esp32`
+4. Install **esp32 by Espressif Systems**
+5. Select **ESP32 Dev Module** as your board
+
+#### Required Libraries
+
+Install via **Sketch → Include Library → Manage Libraries**:
+
+- WiFiManager by tzapu
+- WiFiClientSecure
+- ArduinoHttpClient by Arduino
+- Adafruit ILI9341
+- Adafruit GFX
+
+#### Build and Upload
+
+1. Download the project from GitHub:  
+   https://github.com/canislupus11/HamQSL-XML-Parser/
+2. Open the `.ino` file in Arduino IDE
+3. Select the correct COM port and board
+4. Upload the code to your ESP32
 
 
 
@@ -111,3 +138,32 @@ Jeśli któreś z pasm (6m, 4m, 2m) jest otwarte (np. przez tropo, aurorę), inf
   - ArduinoHttpClient
   - Adafruit_ILI9341
   - Adafruit_GFX
+  - 
+
+## Instalacja środowiska i kompilacja
+
+#### Instalacja płytki ESP32
+
+1. Otwórz Arduino IDE
+2. Przejdź do **Narzędzia → Płytka → Menedżer płytek**
+3. Wyszukaj `esp32`
+4. Zainstaluj **esp32 by Espressif Systems**
+5. Wybierz płytkę **ESP32 Dev Module**
+
+#### Wymagane biblioteki
+
+Zainstaluj przez **Szkic → Dołącz bibliotekę → Zarządzaj bibliotekami**:
+
+- WiFiManager by tzapu
+- WiFiClientSecure
+- ArduinoHttpClient by Arduino
+- Adafruit ILI9341
+- Adafruit GFX
+
+#### Kompilacja i wgrywanie
+
+1. Pobierz projekt z GitHuba:  
+   https://github.com/canislupus11/HamQSL-XML-Parser/
+2. Otwórz plik `.ino` w Arduino IDE
+3. Wybierz odpowiedni port COM i płytkę ESP32 Dev Module
+4. Wgraj kod do płytki
