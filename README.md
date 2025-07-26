@@ -85,7 +85,11 @@ Install via **Sketch → Include Library → Manage Libraries**:
 3. Select the correct COM port and board
 4. Upload the code to your ESP32
 
+## Enclosure
 
+Proposal of 3d printed case:
+- https://www.thingiverse.com/thing:4827372
+- https://www.thingiverse.com/thing:6918515
 
 
 ## Opis działania
@@ -167,3 +171,9 @@ Zainstaluj przez **Szkic → Dołącz bibliotekę → Zarządzaj bibliotekami**:
 2. Otwórz plik `.ino` w Arduino IDE
 3. Wybierz odpowiedni port COM i płytkę ESP32 Dev Module
 4. Wgraj kod do płytki
+
+## Obudowa
+
+Propozycje drukowanej obudowy: 
+- https://www.thingiverse.com/thing:4827372
+- https://www.thingiverse.com/thing:6918515
