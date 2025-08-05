@@ -110,6 +110,7 @@ Replace them with:
 ```
 
 Recompile and upload the project. The image should now appear correctly.
+
 2. Incorrect colors (e.g., red appears blue, yellow appears cyan)
 
 If your display shows swapped or incorrect colors, it may be operating in BGR mode instead of RGB.
@@ -226,6 +227,7 @@ i zamień je na:
 #define ILI9341_TFTHEIGHT 240
 ```
 Następnie skompiluj i wgraj projekt ponownie. Obraz powinien wyświetlać się prawidłowo.
+
 2. Nieprawidłowe kolory (np. czerwony = niebieski, żółty = błękitny)
 
 Jeśli kolory na wyświetlaczu są pozamieniane, to prawdopodobnie ekran działa w trybie BGR zamiast RGB.
