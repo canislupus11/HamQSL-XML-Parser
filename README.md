@@ -99,14 +99,15 @@ If your TFT display shows a distorted or shifted image (e.g., noise bars, incorr
 Some displays using the ILI9342 controller have a different default screen orientation. To fix this, manually modify the header file of the Adafruit ILI9341 library.
 
 Open Adafruit_ILI9341.h and locate:
-
+```cpp
 #define ILI9341_TFTWIDTH  240
 #define ILI9341_TFTHEIGHT 320
-
+```
 Replace them with:
-
+```cpp
 #define ILI9341_TFTWIDTH  320
 #define ILI9341_TFTHEIGHT 240
+```
 
 Recompile and upload the project. The image should now appear correctly.
 2. Incorrect colors (e.g., red appears blue, yellow appears cyan)
@@ -114,10 +115,10 @@ Recompile and upload the project. The image should now appear correctly.
 If your display shows swapped or incorrect colors, it may be operating in BGR mode instead of RGB.
 
 Rather than attempting to change the display controller mode, you can manually adjust the color definitions in your code:
-
+```cpp
 #define RED     0x001F  // was 0xF800
 #define YELLOW  0x07FF  // was 0xFFE0
-
+```
 This simple fix allows the display to show correct colors without modifying controller registers.
 
 
@@ -215,23 +216,24 @@ Jeśli Twój wyświetlacz TFT pokazuje zniekształcony obraz (np. przesunięcie,
 W przypadku wyświetlacza o innej orientacji (np. ILI9342), należy zmodyfikować plik nagłówkowy biblioteki Adafruit_ILI9341.h.
 
 Odszukaj linie:
-
+```cpp
 #define ILI9341_TFTWIDTH  240
 #define ILI9341_TFTHEIGHT 320
-
+```
 i zamień je na:
-
+```cpp
 #define ILI9341_TFTWIDTH  320
 #define ILI9341_TFTHEIGHT 240
-
+```
 Następnie skompiluj i wgraj projekt ponownie. Obraz powinien wyświetlać się prawidłowo.
 2. Nieprawidłowe kolory (np. czerwony = niebieski, żółty = błękitny)
 
 Jeśli kolory na wyświetlaczu są pozamieniane, to prawdopodobnie ekran działa w trybie BGR zamiast RGB.
 
 Zamiast próbować przełączać tryb kontrolera, możesz ręcznie dostosować definicje kolorów w kodzie:
-
-#define RED     0x001F  // wcześniej 0xF800
-#define YELLOW  0x07FF  // wcześniej 0xFFE0
+```cpp
+#define RED     0x001F  // was 0xF800
+#define YELLOW  0x07FF  // was 0xFFE0
+```
 
 To szybkie i skuteczne rozwiązanie, które pozwala dostosować kolory bez modyfikacji rejestrów sterownika.
