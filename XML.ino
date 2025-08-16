@@ -449,7 +449,7 @@ void Display() {
   
   tft.setCursor(17, 3 * s_row + s_row_offset);
   tft.setTextColor(WHITE);
-  tft.print("Sunspots:   ");
+  tft.print("Sunspots:  ");
   if (sunspots > 105) {
     tft.setTextColor(GREEN);
   } else {tft.setTextColor(WHITE);}
