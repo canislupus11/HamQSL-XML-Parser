@@ -9,16 +9,18 @@
 #include "Fonts/FreeSans9pt7b.h"
 #include "Fonts/FreeSansBold12pt7b.h"
 
-// Definicje kolorów
+// Color Define
 //#define RED 0xf882
+//#define RED 0x001F  // Configuration for TZT ESP32 LVGL screen
 #define RED 0xf904
 //#define YELLOW 0xff80
+//#define YELLOW 0x07FF  // Configuration for TZT ESP32 LVGL screen
 #define YELLOW 0xffe0
 #define GREEN 0x07e0
 #define WHITE 0xFFFF
 #define BACKGROUND 0x0000
 
-// Definicje pozycji na ekranie
+// define element position on the screen
 #define column 145
 #define row 25
 #define row_offset 20
@@ -27,11 +29,19 @@
 #define s_row 20
 #define s_row_offset 155
 
-// Konfiguracja systemu
-#define interval 60 // Interwał w minutach co jaki czas są pobierane dane z serwera
+// System configuration
+#define interval 60 // interval in minutes for getting data from the server 
 #define RESET_PIN 32
 
-// Konfiguracja wyświetlacza
+// Screen configuration
+//#define TFT_DC 2  // Configuration for TZT ESP32 LVGL screen
+//#define TFT_MISO 12  // Configuration for TZT ESP32 LVGL screen
+//#define TFT_MOSI 13  // Configuration for TZT ESP32 LVGL screen
+//#define TFT_SCLK 14  // Configuration for TZT ESP32 LVGL screen
+//#define TFT_CS 15  // Configuration for TZT ESP32 LVGL screen
+//#define TFT_RST -1  // Configuration for TZT ESP32 LVGL screen
+//#define LED 27  // Configuration for TZT ESP32 LVGL screen
+
 #define TFT_CS   12
 #define TFT_DC   14
 #define TFT_MOSI 27
@@ -40,10 +50,10 @@
 #define TFT_MISO 33
 #define LED 22
 
-// Inicjalizacja wyświetlacza
-Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
+// Screen initialization
+Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO); // for TZT ESP32 LVGL screen change TFT_CLK to TFT_SCLK
 
-// Konfiguracja HTTPS
+// HTTPS Configuration
 const char* host = "www.hamqsl.com";
 const int httpsPort = 443;
 const String url = "/solarxml.php";
@@ -51,7 +61,7 @@ const String url = "/solarxml.php";
 WiFiClientSecure secureClient;
 HttpClient http(secureClient, host, httpsPort);
 
-// Zmienne na wszystkie dane z XML
+// converting data from XML
 String updated = "";
 int solarflux = 0;
 int aindex = 0;
@@ -71,15 +81,15 @@ String geomagfield = "";
 String signalnoise = "";
 String muf = "";
 
-// Warunki propagacji (Poor=0, Fair=1, Good=2)
+// propagation conditions (Poor=0, Fair=1, Good=2)
 int propagation[8] = {3, 3, 3, 3, 3, 3, 3, 3};
 
-// Warunki VHF - tablice stringów
+// VHF conditions - string table
 String vhf_phenomena[5] = {"", "", "", "", ""};
 String vhf_locations[5] = {"", "", "", "", ""};
 String vhf_conditions[5] = {"", "", "", "", ""};
 
-// Deklaracje funkcji
+// function declaration
 void connectToWiFi();
 bool fetchXML(int retries = 3);
 void GetXMLData();
@@ -94,6 +104,7 @@ void setup() {
   pinMode(RESET_PIN, INPUT_PULLUP);
   tft.begin();
   tft.setRotation(3);
+  //tft.setRotation(2);  // Configuration for TZT ESP32 LVGL screen
   tft.setTextSize(1);
   tft.setFont(&FreeSansBold9pt7b);
   tft.fillScreen(BACKGROUND);
@@ -137,9 +148,9 @@ void loop() {
 void connectToWiFi() {
   WiFi.mode(WIFI_STA); 
   WiFiManager wm;
-  //wm.resetSettings();  //odkomentuj aby zresetować WiFi Managera
+  //wm.resetSettings();  //uncomment for WiFi Manager reset
   wm.setWiFiAPChannel(6);
-  wm.setConfigPortalTimeout(300); // timeout w sekundach (5 minut)
+  wm.setConfigPortalTimeout(300); // timeout in seconds (5 minut)
 
   wm.setAPCallback([](WiFiManager* wm) {
     Serial.println("-> Uruchamiam WiFiManager captive portal...");
@@ -154,7 +165,7 @@ void connectToWiFi() {
     tft.println("and open 192.168.4.1");
   });
 
-  // Spróbuj połączyć automatycznie lub pokaż captive portal
+  // Try to connect automatically or show captive portal
   if (!wm.autoConnect("HamQSL")) {
     Serial.println("! Nie połączono z Wi-Fi w ciągu 5 minut. Restartuję ESP32...");
     delay(2000);
@@ -162,7 +173,7 @@ void connectToWiFi() {
     ESP.restart();
   }
 
-  // Udało się połączyć
+  // connection acquired
   Serial.println("✔ Połączono z Wi-Fi!");
   tft.setCursor(95, 160);
   tft.setTextColor(GREEN);
@@ -180,7 +191,7 @@ bool fetchXML(int retries) {
     if (statusCode == 200) {
       return true;
     }
-    delay(1000); // poczekaj przed ponowną próbą pobrania danych
+    delay(1000); // wait before trying to download the data again
   }
   return false;
 }
@@ -194,9 +205,9 @@ void GetXMLData() {
   }
 
   String response = http.responseBody();
-  //Serial.println(response); // <- Włączyć, aby podglądnąć ściągniętego XML w konsoli szeregowej
+  //Serial.println(response); // <- Enable to view downloaded XML in serial console
 
-  // Parsowanie podstawowych danych
+  // Parsing basic data
   updated = getXMLValue(response, "updated");
   solarflux = getXMLValue(response, "solarflux").toInt();
   aindex = getXMLValue(response, "aindex").toInt();
@@ -216,7 +227,7 @@ void GetXMLData() {
   signalnoise = getXMLValue(response, "signalnoise");
   muf = getXMLValue(response, "muf");
 
-  // Parsowanie warunków propagacji
+  // Parsing propagation conditions
   int pos = 0;
   while (true) {
     int bandStart = response.indexOf("<band ", pos);
@@ -248,7 +259,7 @@ void GetXMLData() {
     pos = bandEnd + 7;
   }
 
-  // Parsowanie warunków VHF
+  // Parsing VHF Conditions
   pos = 0;
   int vhfIndex = 0;
   while (true && vhfIndex < 5) {
@@ -271,7 +282,7 @@ void GetXMLData() {
     vhfIndex++;
   }
 
-  // Wyświetlanie wszystkich danych w Serial Monitor
+  // Displaying all data in Serial Monitor
   Serial.println("=== DANE SOLARNE ===");
   Serial.println("Updated: " + updated);
   Serial.println("Solar Flux: " + String(solarflux));
