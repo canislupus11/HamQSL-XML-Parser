@@ -29,7 +29,6 @@
 
 // Konfiguracja systemu
 #define interval 60 // Interwał w minutach co jaki czas są pobierane dane z serwera
-#define LED 22
 #define RESET_PIN 32
 
 // Konfiguracja wyświetlacza
@@ -39,6 +38,7 @@
 #define TFT_CLK  25
 #define TFT_RST  26
 #define TFT_MISO 33
+#define LED 22
 
 // Inicjalizacja wyświetlacza
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
