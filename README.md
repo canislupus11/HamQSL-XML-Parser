@@ -126,6 +126,8 @@ Rather than attempting to change the display controller mode, you can manually a
 ```
 This simple fix allows the display to show correct colors without modifying controller registers.
 
+If you are using TZT ESP32 LVGL screen - https://a.aliexpress.com/_EwsuCq6 there is a configuration inside that you have to uncomment and comment original one.
+
 
 ## Opis działania
 Urządzenie łączy się z siecią Wi-Fi i pobiera dane propagacyjne z serwera HAMQSL.com w formacie XML. Informacje takie jak Solar Flux, liczba plam słonecznych, indeksy K i A oraz warunki propagacyjne w pasmach HF, 6m, 4m i VHF (2m) są wyświetlane na kolorowym wyświetlaczu TFT. Wszystkie dane z XML są wyciągane do odpowiednich zmiennych w kodzie – dzięki temu można łatwo dostosować, które informacje mają być wyświetlane lub w jakiej formie.
@@ -243,3 +245,5 @@ Zamiast próbować przełączać tryb kontrolera, możesz ręcznie dostosować d
 ```
 
 To szybkie i skuteczne rozwiązanie, które pozwala dostosować kolory bez modyfikacji rejestrów sterownika.
+
+Jeśli używasz TZT ESP32 LVGL screen - https://a.aliexpress.com/_EwsuCq6 w kodzie istnieją zakomentowane linie opisane modelem wyświetlacza, należy zakomentować orginalne i odkomentować te odpowiedzialne za ten wyświetlacz.
