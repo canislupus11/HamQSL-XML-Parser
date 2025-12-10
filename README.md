@@ -58,8 +58,7 @@ If any of the bands (6m, 4m, 2m) is open (e.g., via tropo or aurora), its label 
   - WiFiManager
   - WiFiClientSecure
   - ArduinoHttpClient
-  - Adafruit_ILI9341
-  - Adafruit_GFX
+  - TFT_eSPI
 
 ## Environment Setup and Compilation
 
@@ -78,8 +77,7 @@ Install via **Sketch → Include Library → Manage Libraries**:
 - WiFiManager by tzapu
 - WiFiClientSecure
 - ArduinoHttpClient by Arduino
-- Adafruit ILI9341
-- Adafruit GFX
+- TFT_eSPI
 
 #### Build and Upload
 
@@ -96,35 +94,6 @@ Proposal of 3d printed case:
 - https://www.thingiverse.com/thing:6918515
 
 ## Troubleshooting Display Issues (ILI9341 / ILI9342)
-
-If your TFT display shows a distorted or shifted image (e.g., noise bars, incorrect orientation, or strange colors), it's possible that your screen uses an ILI9342 controller instead of the expected ILI9341. Although Adafruit does not officially support ILI9342, the following workaround might help.
-1. Shifted or distorted image
-
-Some displays using the ILI9342 controller have a different default screen orientation. To fix this, manually modify the header file of the Adafruit ILI9341 library.
-
-Open Adafruit_ILI9341.h and locate:
-```cpp
-#define ILI9341_TFTWIDTH  240
-#define ILI9341_TFTHEIGHT 320
-```
-Replace them with:
-```cpp
-#define ILI9341_TFTWIDTH  320
-#define ILI9341_TFTHEIGHT 240
-```
-
-Recompile and upload the project. The image should now appear correctly.
-
-2. Incorrect colors (e.g., red appears blue, yellow appears cyan)
-
-If your display shows swapped or incorrect colors, it may be operating in BGR mode instead of RGB.
-
-Rather than attempting to change the display controller mode, you can manually adjust the color definitions in your code:
-```cpp
-#define RED     0x001F  // was 0xF800
-#define YELLOW  0x07FF  // was 0xFFE0
-```
-This simple fix allows the display to show correct colors without modifying controller registers.
 
 If you are using TZT ESP32 LVGL screen - https://a.aliexpress.com/_EwsuCq6 there is a configuration inside that you have to uncomment and comment original one.
 
@@ -177,9 +146,7 @@ Jeśli któreś z pasm (6m, 4m, 2m) jest otwarte (np. przez tropo, aurorę), inf
   - WiFiManager
   - WiFiClientSecure
   - ArduinoHttpClient
-  - Adafruit_ILI9341
-  - Adafruit_GFX
-  - 
+  - TFT_eSPI
 
 ## Instalacja środowiska i kompilacja
 
@@ -198,8 +165,7 @@ Zainstaluj przez **Szkic → Dołącz bibliotekę → Zarządzaj bibliotekami**:
 - WiFiManager by tzapu
 - WiFiClientSecure
 - ArduinoHttpClient by Arduino
-- Adafruit ILI9341
-- Adafruit GFX
+- TFT_eSPI
 
 #### Kompilacja i wgrywanie
 
@@ -216,34 +182,5 @@ Propozycje drukowanej obudowy:
 - https://www.thingiverse.com/thing:6918515
 
 ## Rozwiązywanie problemów z wyświetlaczem TFT (ILI9341 / ILI9342)
-
-Jeśli Twój wyświetlacz TFT pokazuje zniekształcony obraz (np. przesunięcie, pasy szumu, nieprawidłowe kolory), możliwe, że trafił Ci się wariant sterownika ILI9342 zamiast ILI9341. Choć Adafruit oficjalnie nie wspiera ILI9342, istnieje proste obejście, które może rozwiązać problem.
-1. Obraz przesunięty, zniekształcony, odwrócony
-
-W przypadku wyświetlacza o innej orientacji (np. ILI9342), należy zmodyfikować plik nagłówkowy biblioteki Adafruit_ILI9341.h.
-
-Odszukaj linie:
-```cpp
-#define ILI9341_TFTWIDTH  240
-#define ILI9341_TFTHEIGHT 320
-```
-i zamień je na:
-```cpp
-#define ILI9341_TFTWIDTH  320
-#define ILI9341_TFTHEIGHT 240
-```
-Następnie skompiluj i wgraj projekt ponownie. Obraz powinien wyświetlać się prawidłowo.
-
-2. Nieprawidłowe kolory (np. czerwony = niebieski, żółty = błękitny)
-
-Jeśli kolory na wyświetlaczu są pozamieniane, to prawdopodobnie ekran działa w trybie BGR zamiast RGB.
-
-Zamiast próbować przełączać tryb kontrolera, możesz ręcznie dostosować definicje kolorów w kodzie:
-```cpp
-#define RED     0x001F  // was 0xF800
-#define YELLOW  0x07FF  // was 0xFFE0
-```
-
-To szybkie i skuteczne rozwiązanie, które pozwala dostosować kolory bez modyfikacji rejestrów sterownika.
 
 Jeśli używasz TZT ESP32 LVGL screen - https://a.aliexpress.com/_EwsuCq6 w kodzie istnieją zakomentowane linie opisane modelem wyświetlacza, należy zakomentować orginalne i odkomentować te odpowiedzialne za ten wyświetlacz.
