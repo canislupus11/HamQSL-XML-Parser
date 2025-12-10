@@ -9,93 +9,112 @@ License: CC-BY-NC-SA
 
 ![FOT_3730](https://github.com/user-attachments/assets/5856e151-d021-445c-963f-bf02a169ebea)
 
-## How It Works
-The device connects to a Wi-Fi network and retrieves propagation data from HAMQSL.com in XML format. It displays information like Solar Flux, sunspot number, K and A indices, and propagation conditions for HF, 6m, 4m, and VHF (2m) bands on a color TFT display. All XML data is parsed into variables in the code, so you can easily configure which information should be displayed or how it should be presented.
+Oto tłumaczenie na angielski z **niezmienionym formatowaniem Markdown**:
 
-## First Start
+---
+
+## How it works
+
+The device connects to a Wi-Fi network and downloads propagation data from the HAMQSL.com server in XML format. Information such as Solar Flux, sunspot number, K and A indices, and propagation conditions for HF, 6m, 4m, and VHF (2m) bands is displayed on a color TFT screen. All XML data is extracted into corresponding variables in the code — this makes it easy to adjust which information should be displayed and in what form.
+
+## First startup
+
 1. Power on the device.
-2. If this is the first boot or Wi-Fi was reset, configuration mode will start.
+2. If this is the first startup or the Wi-Fi network has been reset, the configuration mode will start.
 3. Connect to the Wi-Fi network named `HamQSL`.
-4. Open your web browser and go to `192.168.4.1` to configure the Wi-Fi connection.
-5. After saving, the device will connect automatically.
+4. Open a browser and enter `192.168.4.1` to configure the Wi-Fi connection.
+5. After saving the data, the device will connect automatically.
 
-## Resetting Wi-Fi Settings
-- Hold the RESET button (GPIO 32 to GND) during startup to reset Wi-Fi settings.
+## Resetting Wi-Fi settings
 
-## Displayed Data
+* Hold the RESET button (GPIO 32 to ground) during startup to reset Wi-Fi settings.
 
-| Section           | Description                                  |
-|-------------------|----------------------------------------------|
-| HF Band DAY/NIGHT | Propagation conditions for day/night         |
-| K-Index           | Geomagnetic disturbance index                |
-| A-Index           | Geomagnetic activity index                   |
-| Solar Flux        | Solar radiation flux index                   |
-| Sunspots          | Number of sunspots                           |
-| VHF 6m/4m/2m      | 6m, 4m, and 2m band conditions (if available)|
+## Data displayed on the screen
+
+| Item              | Description                                       |
+| ----------------- | ------------------------------------------------- |
+| HF Band DAY/NIGHT | Propagation conditions during day/night           |
+| K-Index           | Geomagnetic disturbance indicator                 |
+| A-Index           | Geomagnetic activity indicator                    |
+| Solar Flux        | Solar flux (sun activity)                         |
+| Sunspots          | Number of sunspots                                |
+| VHF 6m/4m/2m      | Conditions on 6m, 4m, and 2m bands (if available) |
 
 ### HF Status:
-- RED – poor conditions
-- YELLOW – fair conditions
-- GREEN – good conditions
+
+* Red – poor conditions
+* Yellow – moderate conditions
+* Green – good conditions
 
 ### VHF:
-If any of the bands (6m, 4m, 2m) is open (e.g., via tropo or aurora), its label appears in green.
 
-## Data Refresh
-- Data is automatically refreshed every **60 minutes**.
-- This interval can be changed by editing the `interval` constant in the source code.
-- **Do not set the refresh interval below 60 minutes!**
+If any of the bands (6m, 4m, 2m) are open (e.g., due to tropo or aurora), the information will appear in green.
+
+## Data refresh
+
+* Data is refreshed automatically every **60 minutes**.
+* This interval can be changed by modifying the `interval` constant in the source code.
+* **Do not set the refresh interval shorter than 60 minutes!**
 
 ## Tips
-- Serial port runs at 115200 baud – useful for debugging.
-- If Wi-Fi connection fails within 5 minutes, the device will restart automatically.
 
-## Technical Requirements
-- Microcontroller: ESP32
-- Display: TFT 2.8" ILI9341 (SPI)
+* The serial port operates at 115200 baud — it can be used for diagnostics.
+* If the Wi-Fi connection fails within 5 minutes, the device will restart.
 
-- Arduino Libraries:
-  - WiFiManager
-  - WiFiClientSecure
-  - ArduinoHttpClient
-  - TFT_eSPI
+## Technical requirements
 
-## Environment Setup and Compilation
+* Microcontroller: ESP32
+* Display: TFT 2.8" ILI9341 (SPI)
+* Arduino libraries:
 
-#### Installing ESP32 Board Support
+  * WiFiManager
+  * WiFiClientSecure
+  * ArduinoHttpClient
+  * TFT_eSPI
+
+## Environment setup and compilation
+
+#### Installing the ESP32 board
 
 1. Open Arduino IDE
-2. Go to **Tools → Board → Board Manager**
+2. Go to **Tools → Board → Boards Manager**
 3. Search for `esp32`
 4. Install **esp32 by Espressif Systems**
-5. Select **ESP32 Dev Module** as your board
+5. Select the **ESP32 Dev Module** board
 
-#### Required Libraries
+#### Required libraries
 
 Install via **Sketch → Include Library → Manage Libraries**:
 
-- WiFiManager by tzapu
-- WiFiClientSecure
-- ArduinoHttpClient by Arduino
-- TFT_eSPI
+* WiFiManager by tzapu
+* WiFiClientSecure
+* ArduinoHttpClient by Arduino
+* TFT_eSPI
 
-#### Build and Upload
+#### Compilation and uploading
 
-1. Download the project from GitHub:  
-   https://github.com/canislupus11/HamQSL-XML-Parser/
-2. Open the `.ino` file in Arduino IDE
-3. Select the correct COM port and board
-4. Upload the code to your ESP32
+1. Download the project from GitHub:
+   [https://github.com/canislupus11/HamQSL-XML-Parser/](https://github.com/canislupus11/HamQSL-XML-Parser/)
+2. Place the User_Setup.h file into the TFT_eSPI library directory (likely Arduino/libraries/TFT_eSPI)
+3. Open the `.ino` file in Arduino IDE
+4. Select the appropriate COM port and the ESP32 Dev Module board
+5. Upload the code to the board
 
 ## Enclosure
 
-Proposal of 3d printed case:
-- https://www.thingiverse.com/thing:4827372
-- https://www.thingiverse.com/thing:6918515
+Suggested 3D-printed enclosures:
 
-## Troubleshooting Display Issues (ILI9341 / ILI9342)
+* [https://www.thingiverse.com/thing:4827372](https://www.thingiverse.com/thing:4827372)
+* [https://www.thingiverse.com/thing:6918515](https://www.thingiverse.com/thing:6918515)
 
-If you are using TZT ESP32 LVGL screen - https://a.aliexpress.com/_EwsuCq6 there is a configuration inside that you have to uncomment and comment original one.
+Oto dodatkowa sekcja w **angielskiej wersji**, również w niezmienionym formacie Markdown:
+
+
+## Troubleshooting TFT display issues (ILI9341 / ILI9342)
+
+If you are using the TZT ESP32 LVGL screen – [https://a.aliexpress.com/_EwsuCq6](https://a.aliexpress.com/_EwsuCq6) – there are commented lines in the code marked with the display model. You must comment out the original ones and uncomment the lines corresponding to this specific display.
+
+---
 
 
 ## Opis działania
@@ -171,9 +190,10 @@ Zainstaluj przez **Szkic → Dołącz bibliotekę → Zarządzaj bibliotekami**:
 
 1. Pobierz projekt z GitHuba:  
    https://github.com/canislupus11/HamQSL-XML-Parser/
-2. Otwórz plik `.ino` w Arduino IDE
-3. Wybierz odpowiedni port COM i płytkę ESP32 Dev Module
-4. Wgraj kod do płytki
+2. Plik User_Setup.h wrzuć do katalogu z biblioteką TFT_eSPI (Prawdopodobnie Adruino/libraries/TFT_eSPI)
+3. Otwórz plik `.ino` w Arduino IDE
+4. Wybierz odpowiedni port COM i płytkę ESP32 Dev Module
+5. Wgraj kod do płytki
 
 ## Obudowa
 
