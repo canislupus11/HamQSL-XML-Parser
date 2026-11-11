@@ -9,8 +9,6 @@ License: CC-BY-NC-SA
 
 ![FOT_3730](https://github.com/user-attachments/assets/5856e151-d021-445c-963f-bf02a169ebea)
 
-Oto tłumaczenie na angielski z **niezmienionym formatowaniem Markdown**:
-
 ---
 
 ## How it works
